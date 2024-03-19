@@ -1,11 +1,10 @@
 //import * as express from 'express'
 import express, { Request, Response } from 'express'
-import { createAdministratorService } from './administration'
-import { Aircraft, SeatType, Versioned } from './datalayer/contract'
-import { version } from 'os'
+import { createAdministratorService } from './service'
+import { Aircraft, CabinLayout, SeatType } from './datalayer/contract'
 
 export const live = () => {
-  const administrator = createAdministratorService(false)
+  const service = createAdministratorService(false)
 
   const app = express()
 
@@ -19,7 +18,7 @@ export const live = () => {
   })
 
   app.get('/aircrafts', async (_: Request, res: Response) => {
-    return res.json(await administrator.getAircrafts())
+    return res.json(await service.getAircrafts())
   })
 
   app.post('/aircrafts', async (req: Request, res: Response) => {
@@ -28,7 +27,7 @@ export const live = () => {
     }
     const aircraft = req.body as Aircraft
     try {
-      await administrator.insertAircraft(aircraft)
+      await service.insertAircraft(aircraft)
       res.status(201).json(aircraft)
     } catch (err: any) {
       res.status(400).json({ message: err.message })
@@ -46,7 +45,7 @@ export const live = () => {
     const version = parseInt(req.params['version'])
 
     try {
-      await administrator.updateAircraft(aircraft, version)
+      await service.updateAircraft(aircraft, version)
       res.status(201).json(aircraft)
     } catch (err: any) {
       res.status(400).json({ message: err.message })
@@ -57,7 +56,7 @@ export const live = () => {
     if (!req.params['model']) {
       return res.status(404).send('Not found')
     }
-    const r = await administrator.getAircraft(req.params['model'])
+    const r = await service.getAircraft(req.params['model'])
     if (!r) {
       return res.status(404).send('Not found')
     }
@@ -72,11 +71,11 @@ export const live = () => {
       return res.status(400).send('Invalid request')
     }
     const version = parseInt(req.params['version'])
-    return res.json(await administrator.deleteAircraft(req.params['model'], version))
+    return res.json(await service.deleteAircraft(req.params['model'], version))
   })
 
   app.get('/seats', async (_: Request, res: Response) => {
-    return res.json(await administrator.getSeatTypes())
+    return res.json(await service.getSeatTypes())
   })
 
   app.post('/seats', async (req: Request, res: Response) => {
@@ -86,7 +85,7 @@ export const live = () => {
 
     const seat = req.body as SeatType
     try {
-      await administrator.insertSeatType(seat)
+      await service.insertSeatType(seat)
       res.status(201).json(seat)
     } catch (err: any) {
       res.status(400).json({ message: err.message })
@@ -104,7 +103,7 @@ export const live = () => {
 
     const seat = req.body as SeatType
     try {
-      await administrator.updateSeatType(seat, version)
+      await service.updateSeatType(seat, version)
       res.status(201).json(seat)
     } catch (err: any) {
       res.status(400).json({ message: err.message })
@@ -112,7 +111,7 @@ export const live = () => {
   })
 
   app.get('/seats/:id', async (req: Request, res: Response) => {
-    const r = await administrator.getSeatType(req.params.id)
+    const r = await service.getSeatType(req.params.id)
     if (!r) {
       return res.status(404).send('Not found')
     }
@@ -125,7 +124,60 @@ export const live = () => {
     }
     const version = parseInt(req.params['version'])
 
-    return res.json(await administrator.deleteSeatType(req.params.id, version))
+    return res.json(await service.deleteSeatType(req.params.id, version))
+  })
+
+  app.get('/layouts', async (_: Request, res: Response) => {
+    return res.json(await service.getCabinLayouts())
+  })
+
+  app.post('/layouts', async (req: Request, res: Response) => {
+    if (!req.body) {
+      res.status(400).json({ message: 'Invalid request' })
+    }
+
+    const layout = req.body as CabinLayout
+    try {
+      await service.insertCabinLayout(layout)
+      res.status(201).json(layout)
+    } catch (err: any) {
+      res.status(400).json({ message: err.message })
+    }
+  })
+
+  app.put('/layouts/:version', async (req: Request, res: Response) => {
+    if (!req.body) {
+      res.status(400).json({ message: 'Invalid request' })
+    }
+    if (!req.params['version']) {
+      return res.status(400).send('Invalid request')
+    }
+    const version = parseInt(req.params['version'])
+
+    const layout = req.body as CabinLayout
+    try {
+      await service.updateCabinLayout(layout, version)
+      res.status(201).json(layout)
+    } catch (err: any) {
+      res.status(400).json({ message: err.message })
+    }
+  })
+
+  app.get('/seats/:id', async (req: Request, res: Response) => {
+    const r = await service.getSeatType(req.params.id)
+    if (!r) {
+      return res.status(404).send('Not found')
+    }
+    return res.json(r)
+  })
+
+  app.delete('/seats/:id/:version', async (req: Request, res: Response) => {
+    if (!req.params['version']) {
+      return res.status(400).send('Invalid request')
+    }
+    const version = parseInt(req.params['version'])
+
+    return res.json(await service.deleteSeatType(req.params.id, version))
   })
 
   app.listen(port, () => {

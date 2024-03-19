@@ -1,3 +1,5 @@
+import { type } from 'os'
+
 export type Aircraft = {
   model: string
   manufacturer: string
@@ -24,19 +26,36 @@ export type SeatType = {
   features: string[]
 }
 
+export type CabinLayout = { id: String; length: number; width: number; rows: CabinRow[] }
+export type CabinRow = { type: SeatType['id']; seats: number; extraSpace: number }
+
+/*
+const row1: CabinRow = {
+  type: 'BIZ-ADV',
+  seats:4,
+  //groups: [{ seats: ['seat', 'seat', 'empty'], aisle: 106 }, { seats: ['empty', 'seat', 'seat'] }],
+  extraSpace: 0,
+}
+*/
+
 export type Versioned<T> = T & { version: number }
 
 export type Db = {
   insertAircraft: (aircraft: Aircraft) => Promise<void>
   updateAircraft: (aircraft: Aircraft, version: number) => Promise<void>
-  getAircraft: (model: string) => Promise<Versioned<Aircraft> | undefined>
+  getAircraft: (model: Aircraft['model']) => Promise<Versioned<Aircraft> | undefined>
   getAircrafts: () => Promise<Versioned<Aircraft>[]>
-  deleteAircraft: (model: string, version: number) => Promise<void>
+  deleteAircraft: (model: Aircraft['model'], version: number) => Promise<void>
   insertSeatType: (seatType: SeatType) => Promise<void>
   updateSeatType: (seatType: SeatType, version: number) => Promise<void>
-  getSeatType: (id: string) => Promise<Versioned<SeatType> | undefined>
+  getSeatType: (id: SeatType['id']) => Promise<Versioned<SeatType> | undefined>
   getSeatTypes: () => Promise<Versioned<SeatType>[]>
-  deleteSeatType: (id: string, version: number) => Promise<void>
+  deleteSeatType: (id: SeatType['id'], version: number) => Promise<void>
+  insertCabinLayout: (layout: CabinLayout) => Promise<void>
+  updateCabinLayout: (layout: CabinLayout, version: number) => Promise<void>
+  getCabinLayout: (id: CabinLayout['id']) => Promise<Versioned<CabinLayout> | undefined>
+  getCabinLayouts: () => Promise<Versioned<CabinLayout>[]>
+  deleteCabinLayout: (model: CabinLayout['id'], version: number) => Promise<void>
 }
 
 export const strictVersionize = <T>(entity: T, version: number): Versioned<T> => ({
