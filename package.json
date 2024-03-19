@@ -1,0 +1,33 @@
+{
+  "name": "evilton",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "syncpack:list": "npx syncpack list",
+    "syncpack:check": "npx syncpack list-mismatches",
+    "syncpack:fix": "npx syncpack fix-mismatches && pnpm install",
+    "prettier:check": "turbo run prettier:check && pnpm prettier:check:local",
+    "prettier:check:local": "prettier \"*.{json,html}\" --check --log-level log",
+    "prettier:fix": "turbo run prettier:fix && pnpm prettier:fix:local",
+    "prettier:fix:local": "prettier --list-different \"*.{json,html}\" --write",
+    "ts:check": "turbo run ts:check --parallel",
+    "test": "turbo run test -- --passWithNoTests",
+    "turbo": "turbo"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "syncpack": "12.3.0",
+    "turbo": "1.12.5",
+    "@evilton/prettier-config": "workspace:*"
+  },
+  "engines": {
+    "pnpm": ">=8.8.0",
+    "node": ">=20.0.8"
+  },
+  "prettier": "@evilton/prettier-config"
+}

@@ -1,0 +1,4 @@
+{
+  "extends": "@evilton/ts-config/library.json",
+  "include": ["src/**/*.ts*"]
+}

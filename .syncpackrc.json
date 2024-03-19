@@ -1,0 +1,17 @@
+{
+  "dependencyTypes": ["dev", "peer", "prod"],
+  "versionGroups": [
+    {
+      "label": "Ensure typescript dependencies always use the same version",
+      "packages": ["**"],
+      "dependencies": ["typescript"],
+      "pinVersion": "5.3.3"
+    },
+    {
+      "label": "Ensure @types/node dependencies always use the same version",
+      "packages": ["**"],
+      "dependencies": ["@types/node"],
+      "pinVersion": "20.11.24"
+    }
+  ]
+}

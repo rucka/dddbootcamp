@@ -1,0 +1,16 @@
+{
+  "name": "@evilton/ts-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@evilton/prettier-config": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "5.3.3"
+  },
+  "prettier": "@evilton/prettier-config"
+}

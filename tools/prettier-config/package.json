@@ -1,0 +1,21 @@
+{
+  "name": "@evilton/prettier-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": ".prettierrc.json",
+  "bin": {
+    "prettier-check": "./bin/prettier-check.sh",
+    "prettier-fix": "./bin/prettier-fix.sh"
+  },
+  "keywords": [
+    "prettier",
+    "prettier-config"
+  ],
+  "peerDependencies": {
+    "prettier": "3.2.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

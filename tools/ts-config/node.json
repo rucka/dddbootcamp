@@ -1,0 +1,9 @@
+{
+  "extends": "./base.json",
+  "compilerOptions": {
+        "esModuleInterop": false,
+        "target": "es2015",
+        "module":"esnext",
+        "moduleResolution": "node"
+  }
+}

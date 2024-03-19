@@ -1,0 +1,1 @@
+prettier "{**/*,*}.{ts,tsx,js,jsx,json,html}" --write --ignore-path "$(pwd)/$line".prettierignore
