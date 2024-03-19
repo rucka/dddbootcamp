@@ -24,13 +24,25 @@ export type SeatType = {
   features: string[]
 }
 
+export type Versioned<T> = T & { version: number }
+
 export type Db = {
-  upsertAircraft: (aircraft: Aircraft) => Promise<void>
-  getAircraft: (model: string) => Promise<Aircraft | undefined>
-  getAircrafts: () => Promise<Aircraft[]>
-  deleteAircraft: (model: string) => Promise<void>
-  upsertSeatType: (seatType: SeatType) => Promise<void>
-  getSeatType: (id: string) => Promise<SeatType | undefined>
-  getSeatTypes: () => Promise<SeatType[]>
-  deleteSeatType: (id: string) => Promise<void>
+  insertAircraft: (aircraft: Aircraft) => Promise<void>
+  updateAircraft: (aircraft: Aircraft, version: number) => Promise<void>
+  getAircraft: (model: string) => Promise<Versioned<Aircraft> | undefined>
+  getAircrafts: () => Promise<Versioned<Aircraft>[]>
+  deleteAircraft: (model: string, version: number) => Promise<void>
+  insertSeatType: (seatType: SeatType) => Promise<void>
+  updateSeatType: (seatType: SeatType, version: number) => Promise<void>
+  getSeatType: (id: string) => Promise<Versioned<SeatType> | undefined>
+  getSeatTypes: () => Promise<Versioned<SeatType>[]>
+  deleteSeatType: (id: string, version: number) => Promise<void>
 }
+
+export const strictVersionize = <T>(entity: T, version: number): Versioned<T> => ({
+  ...entity,
+  ...{ version },
+})
+
+export const versionize = <T>(entity: T | undefined, version: number): Versioned<T> | undefined =>
+  entity ? strictVersionize(entity, version) : undefined

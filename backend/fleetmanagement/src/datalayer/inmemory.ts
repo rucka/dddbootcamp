@@ -1,11 +1,16 @@
-import type { Aircraft, Db, SeatType } from './contract'
+import type { Db, Versioned, Aircraft, SeatType } from './contract'
+import { versionize, strictVersionize } from './contract'
 import data from './data'
 
 export const createInMemoryDb = (): Db => {
   const database = data
 
   const db: Db = {
-    upsertAircraft: function (aircraft: Aircraft): Promise<void> {
+    insertAircraft: function (aircraft: Aircraft): Promise<void> {
+      database.aircrafts.push(aircraft)
+      return Promise.resolve()
+    },
+    updateAircraft: function (aircraft: Aircraft, _: number): Promise<void> {
       const i = database.aircrafts.findIndex(a => a.model === aircraft.model)
       if (!i || i === -1) {
         database.aircrafts.push(aircraft)
@@ -14,20 +19,31 @@ export const createInMemoryDb = (): Db => {
       }
       return Promise.resolve()
     },
-    getAircraft: function (model: string): Promise<Aircraft | undefined> {
-      return Promise.resolve(database.aircrafts.find(a => a.model === model))
+    getAircraft: function (model: string): Promise<Versioned<Aircraft> | undefined> {
+      return Promise.resolve(
+        versionize(
+          database.aircrafts.find(a => a.model === model),
+          1,
+        ),
+      )
     },
-    getAircrafts: function (): Promise<Aircraft[]> {
-      return Promise.resolve(JSON.parse(JSON.stringify(database.aircrafts)))
+    getAircrafts: function (): Promise<Versioned<Aircraft>[]> {
+      const xs: Aircraft[] = JSON.parse(JSON.stringify(database.aircrafts))
+      const versionxs: Versioned<Aircraft>[] = xs.map(x => strictVersionize(x, 1))
+      return Promise.resolve(versionxs)
     },
-    deleteAircraft: function (model: string): Promise<void> {
+    deleteAircraft: function (model: string, _: number): Promise<void> {
       const a = database.aircrafts.find(a => a.model === model)
       if (a) {
         database.aircrafts = database.aircrafts.filter(x => x.model !== a.model)
       }
       return Promise.resolve()
     },
-    upsertSeatType: function (seatType: SeatType): Promise<void> {
+    insertSeatType: function (seatType: SeatType): Promise<void> {
+      database.seats.push(seatType)
+      return Promise.resolve()
+    },
+    updateSeatType: (seatType: SeatType, _: number): Promise<void> => {
       const i = database.seats.findIndex(a => a.id === seatType.id)
       if (!i || i === -1) {
         database.seats.push(seatType)
@@ -36,13 +52,20 @@ export const createInMemoryDb = (): Db => {
       }
       return Promise.resolve()
     },
-    getSeatType: function (id: string): Promise<SeatType | undefined> {
-      return Promise.resolve(database.seats.find(a => a.id === id))
+    getSeatType: function (id: string): Promise<Versioned<SeatType> | undefined> {
+      return Promise.resolve(
+        versionize(
+          database.seats.find(a => a.id === id),
+          1,
+        ),
+      )
     },
-    getSeatTypes: function (): Promise<SeatType[]> {
-      return Promise.resolve(JSON.parse(JSON.stringify(database.seats)))
+    getSeatTypes: function (): Promise<Versioned<SeatType>[]> {
+      const xs: SeatType[] = JSON.parse(JSON.stringify(database.seats))
+      const versionxs: Versioned<SeatType>[] = xs.map(x => strictVersionize(x, 1))
+      return Promise.resolve(versionxs)
     },
-    deleteSeatType: function (id: string): Promise<void> {
+    deleteSeatType: function (id: string, version: number): Promise<void> {
       const a = database.seats.find(a => a.id === id)
       if (a) {
         database.seats = database.seats.filter(x => x.id !== a.id)
