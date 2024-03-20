@@ -64,7 +64,7 @@ const validateLayout = (db: Db) => async (layout: CabinLayout) => {
     if (!type) {
       throw new Error(`row type ${type} not found`)
     }
-    if (row.extraSpace < 0 || row.seats > 100) {
+    if (row.extraSpace < 0 || row.extraSpace > 100) {
       throw new Error(`Extra space have to be positive and seats have to be less than 100`)
     }
     const width = type.width * row.seats
