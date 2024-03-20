@@ -26,14 +26,26 @@ export type SeatType = {
   features: string[]
 }
 
-export type CabinLayout = { id: String; length: number; width: number; rows: CabinRow[] }
+export type CabinLayout = { id: string; length: number; width: number; rows: CabinRow[] }
 export type CabinRow = { type: SeatType['id']; seats: number; extraSpace: number }
 
 /*
+const layout1: CabinLayout = {
+  id: '1',
+  length: 10,
+  width: 10,
+  rows: [
+    {
+      type: 'BIZ-ADV',
+      seats: 4,
+      extraSpace: 0,
+    },
+  ],
+}
+
 const row1: CabinRow = {
   type: 'BIZ-ADV',
   seats:4,
-  //groups: [{ seats: ['seat', 'seat', 'empty'], aisle: 106 }, { seats: ['empty', 'seat', 'seat'] }],
   extraSpace: 0,
 }
 */

@@ -49,35 +49,20 @@ const validateLayout = (db: Db) => async (layout: CabinLayout) => {
   if (!layout.id) {
     throw new Error('layout requires id')
   }
-
   for await (const row of layout.rows) {
     const type = await db.getSeatType(row.type)
     if (!type) {
       throw new Error(`row type ${type} not found`)
     }
-    const width = type.width * row.seats + row.extraSpace
+    if (row.extraSpace < 0 || row.seats > 100) {
+      throw new Error(`Extra space have to be positive and seats have to be less than 100`)
+    }
+    const width = type.width * row.seats
     if (width > layout.width) {
       throw new Error(`row width ${width} exceeds layout width ${layout.width}`)
     }
-    //await validateRow(db)(row)
-  }
-
-  // throw new Error('layout not valid')
-}
-/*
-const validateRow = (db: Db) => async (row: CabinRow) => {
-  if (!row.type) {
-    throw new Error('row requires type')
-  }
-
-  if (!row.seats) {
-    throw new Error('row requires seats')
-  }
-
-  if (!row.extraSpace) {
-    throw new Error('row requires extraSpace')
-  } else if (row.extraSpace < 0) {
-    throw new Error('row extraSpace cannot be negative')
+    if (width === layout.width) {
+      throw new Error(`row have to provide at least 1 aisle`)
+    }
   }
 }
-*/
