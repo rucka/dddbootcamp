@@ -1,5 +1,5 @@
-import type { Db, Versioned, Aircraft, SeatType, CabinLayout } from './contract'
-import { versionize, strictVersionize } from './contract'
+import type { Db, Versioned, Aircraft, SeatType, CabinLayout, FleetUnit } from './model'
+import { versionize, strictVersionize } from './model'
 import data from './data'
 
 export const createInMemoryDb = (): Db => {
@@ -85,6 +85,21 @@ export const createInMemoryDb = (): Db => {
       throw new Error('Function not implemented.')
     },
     deleteCabinLayout: function (model: String, version: number): Promise<void> {
+      throw new Error('Function not implemented.')
+    },
+    insertFleetUnit: function (unit: FleetUnit): Promise<void> {
+      throw new Error('Function not implemented.')
+    },
+    updateFleetUnit: function (unit: FleetUnit, version: number): Promise<void> {
+      throw new Error('Function not implemented.')
+    },
+    getFleetUnit: function (tailNumber: string): Promise<Versioned<FleetUnit> | undefined> {
+      throw new Error('Function not implemented.')
+    },
+    getFleetUnits: function (): Promise<Versioned<FleetUnit>[]> {
+      throw new Error('Function not implemented.')
+    },
+    deleteFleetUnit: function (tailNumber: string, version: number): Promise<void> {
       throw new Error('Function not implemented.')
     },
   }

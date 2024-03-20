@@ -1,7 +1,7 @@
 //import * as express from 'express'
 import express, { Request, Response } from 'express'
 import { createAdministratorService } from './../service'
-import { Aircraft, CabinLayout, SeatType } from './../datalayer/contract'
+import { Aircraft, CabinLayout, FleetUnit, SeatType } from './../datalayer/model'
 import { createRouter } from './creatRouter'
 
 export const live = () => {
@@ -47,6 +47,16 @@ export const live = () => {
     service.deleteCabinLayout,
   )
   app.use('/layouts', layoutRouter)
+
+  const fleetUnitRouter = createRouter<FleetUnit>(
+    'tailNumber',
+    service.getFleetUnits,
+    service.getFleetUnit,
+    service.insertFleetUnit,
+    service.updateFleetUnit,
+    service.deleteFleetUnit,
+  )
+  app.use('/fleets', fleetUnitRouter)
 
   app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`)

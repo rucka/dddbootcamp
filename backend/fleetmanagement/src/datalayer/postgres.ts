@@ -6,11 +6,13 @@ import {
   type SeatType,
   type Versioned,
   CabinLayout,
-} from './contract'
+  FleetUnit,
+} from './model'
 
 const AIRCRAFT = 'aircraft'
 const SEAT_TYPE = 'seat'
 const CABIN_LAYOUT = 'cabinLayout'
+const FLEET_UNIT = 'fleetUnit'
 
 export const createPostgres = (): Db => {
   const pool = new Pool({
@@ -66,6 +68,21 @@ export const createPostgres = (): Db => {
     },
     deleteCabinLayout: function (id: string, version: number): Promise<void> {
       return deleteById(pool, CABIN_LAYOUT, id, version)
+    },
+    insertFleetUnit: function (unit: FleetUnit): Promise<void> {
+      return insert(pool, FLEET_UNIT, unit.tailNumber, unit)
+    },
+    updateFleetUnit: function (unit: FleetUnit, version: number): Promise<void> {
+      return update(pool, FLEET_UNIT, unit.tailNumber, unit, version)
+    },
+    getFleetUnit: function (tailNumber: string): Promise<Versioned<FleetUnit> | undefined> {
+      return getById(pool, FLEET_UNIT, tailNumber)
+    },
+    getFleetUnits: function (): Promise<Versioned<FleetUnit>[]> {
+      return getAll(pool, FLEET_UNIT)
+    },
+    deleteFleetUnit: function (tailNumber: string, version: number): Promise<void> {
+      return deleteById(pool, FLEET_UNIT, tailNumber, version)
     },
   }
   return db

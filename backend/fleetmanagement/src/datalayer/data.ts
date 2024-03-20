@@ -1,4 +1,4 @@
-import type { Aircraft, SeatType } from './contract'
+import type { Aircraft, SeatType } from './model'
 
 const aircrafts: Aircraft[] = [
   {

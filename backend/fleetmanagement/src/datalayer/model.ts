@@ -50,6 +50,15 @@ const row1: CabinRow = {
 }
 */
 
+export type FleetUnit = {
+  tailNumber: string
+  model: string
+  manufacturingDate: String
+  dateOfPurchase: string
+  nextMaintenanceDate: string
+  cabinLayoutId: string
+}
+
 export type Versioned<T> = T & { version: number }
 
 export type Db = {
@@ -67,7 +76,12 @@ export type Db = {
   updateCabinLayout: (layout: CabinLayout, version: number) => Promise<void>
   getCabinLayout: (id: CabinLayout['id']) => Promise<Versioned<CabinLayout> | undefined>
   getCabinLayouts: () => Promise<Versioned<CabinLayout>[]>
-  deleteCabinLayout: (model: CabinLayout['id'], version: number) => Promise<void>
+  deleteCabinLayout: (id: CabinLayout['id'], version: number) => Promise<void>
+  insertFleetUnit: (unit: FleetUnit) => Promise<void>
+  updateFleetUnit: (unit: FleetUnit, version: number) => Promise<void>
+  getFleetUnit: (tailNumber: FleetUnit['tailNumber']) => Promise<Versioned<FleetUnit> | undefined>
+  getFleetUnits: () => Promise<Versioned<FleetUnit>[]>
+  deleteFleetUnit: (tailNumber: FleetUnit['tailNumber'], version: number) => Promise<void>
 }
 
 export const strictVersionize = <T>(entity: T, version: number): Versioned<T> => ({

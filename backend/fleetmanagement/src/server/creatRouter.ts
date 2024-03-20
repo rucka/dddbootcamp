@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { Versioned } from '../datalayer/contract'
+import { Versioned } from '../datalayer/model'
 
 type GetAll<T> = () => Promise<Versioned<T>[]>
 type GetById<T> = (id: string) => Promise<Versioned<T> | undefined>

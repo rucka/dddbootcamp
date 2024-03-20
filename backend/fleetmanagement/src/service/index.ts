@@ -1,5 +1,5 @@
 import { createInMemoryDb, createPostgres } from './../datalayer'
-import { CabinLayout, Db } from './../datalayer/contract'
+import { CabinLayout, Db } from './../datalayer/model'
 
 export type AdministratorService = {
   insertAircraft: Db['insertAircraft']
@@ -17,6 +17,11 @@ export type AdministratorService = {
   getCabinLayout: Db['getCabinLayout']
   getCabinLayouts: Db['getCabinLayouts']
   deleteCabinLayout: Db['deleteCabinLayout']
+  insertFleetUnit: Db['insertFleetUnit']
+  updateFleetUnit: Db['updateFleetUnit']
+  getFleetUnit: Db['getFleetUnit']
+  getFleetUnits: Db['getFleetUnits']
+  deleteFleetUnit: Db['deleteFleetUnit']
 }
 
 export const createAdministratorService: (inmemory: boolean) => AdministratorService = inmemory => {
@@ -43,6 +48,11 @@ export const createAdministratorService: (inmemory: boolean) => AdministratorSer
     getCabinLayout: db.getCabinLayout,
     getCabinLayouts: db.getCabinLayouts,
     deleteCabinLayout: db.deleteCabinLayout,
+    insertFleetUnit: db.insertFleetUnit,
+    updateFleetUnit: db.updateFleetUnit,
+    getFleetUnit: db.getFleetUnit,
+    getFleetUnits: db.getFleetUnits,
+    deleteFleetUnit: db.deleteFleetUnit,
   }
 }
 const validateLayout = (db: Db) => async (layout: CabinLayout) => {
