@@ -1,7 +1,7 @@
 import { createInMemoryDb, createPostgres } from './../datalayer'
 import { CabinLayout, Db } from './../datalayer/contract'
 
-type AdministratorService = {
+export type AdministratorService = {
   insertAircraft: Db['insertAircraft']
   updateAircraft: Db['updateAircraft']
   getAircraft: Db['getAircraft']
